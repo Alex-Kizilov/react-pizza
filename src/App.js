@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 
 import { Header } from './components';
 import { Home, Cart } from './pages';
 import { Route } from 'react-router-dom';
 
 function App() {
-  const dispatch = useDispatch();
-
   return (
     <div className="wrapper">
       <Header />

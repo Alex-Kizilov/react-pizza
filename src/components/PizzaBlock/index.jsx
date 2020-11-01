@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Button from '../Button';
 
-function PizzaBLock({ name, imageUrl, price, types, sizes }) {
+function PizzaBLock({
+  id,
+  name,
+  imageUrl,
+  price,
+  types,
+  sizes,
+  onClickAddPizza,
+  addedCount,
+}) {
   const availableType = ['тонкое', 'традиционное'];
   const availableSizes = [26, 30, 40];
 
@@ -14,6 +24,19 @@ function PizzaBLock({ name, imageUrl, price, types, sizes }) {
   };
   const onSelectSize = (index) => {
     setActiveSize(index);
+  };
+
+  const onAddPizza = () => {
+    const obj = {
+      id,
+      name,
+      imageUrl,
+      price,
+      size: activeSize,
+      type: availableType[activeType],
+    };
+
+    onClickAddPizza(obj);
   };
 
   return (
@@ -38,9 +61,9 @@ function PizzaBLock({ name, imageUrl, price, types, sizes }) {
           {availableSizes.map((size, index) => (
             <li
               key={size}
-              onClick={() => onSelectSize(index)}
+              onClick={() => onSelectSize(size)}
               className={classNames({
-                active: activeSize === index,
+                active: activeSize === size,
                 disabled: !sizes.includes(size),
               })}>
               {size} см.
@@ -50,7 +73,7 @@ function PizzaBLock({ name, imageUrl, price, types, sizes }) {
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">от {price} ₽</div>
-        <div className="button button--outline button--add">
+        <Button onClick={onAddPizza} className="button--add" outline>
           <svg
             width="12"
             height="12"
@@ -63,8 +86,8 @@ function PizzaBLock({ name, imageUrl, price, types, sizes }) {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
-        </div>
+          {addedCount && <i>{addedCount}</i>}
+        </Button>
       </div>
     </div>
   );
@@ -76,6 +99,8 @@ PizzaBLock.propTypes = {
   price: PropTypes.number,
   types: PropTypes.arrayOf(PropTypes.number.isRequired),
   sizes: PropTypes.arrayOf(PropTypes.number.isRequired),
+  onAddPizza: PropTypes.func,
+  addedCount: PropTypes.number,
 };
 
 PizzaBLock.defaultProps = {

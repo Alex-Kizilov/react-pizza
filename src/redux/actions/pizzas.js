@@ -5,11 +5,17 @@ export const setLoaded = (payload) => ({
   payload,
 });
 
-export const fetchPizzas = () => (dispath) => {
+export const fetchPizzas = (sortBy, category) => (dispath) => {
   dispath(setLoaded(false));
-  axios.get('http://localhost:3001/pizzas').then(({ data }) => {
-    dispath(setPizzas(data));
-  });
+  axios
+    .get(
+      `/pizzas?${category !== null ? `category=${category}` : null}&_sort=${
+        sortBy.type
+      }&_order=${sortBy.order}`
+    )
+    .then(({ data }) => {
+      dispath(setPizzas(data));
+    });
 };
 
 export const setPizzas = (items) => ({
